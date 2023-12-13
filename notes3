@@ -1,0 +1,45 @@
+class Character:
+    def __init__(self, name, char_id):
+        self.name = name
+        self.char_id = char_id
+
+class Hero(Character):
+    def __init__(self, name, char_id, level, loot):
+        super().__init__(name, char_id)
+        self.level = level
+        self.loot = loot
+
+class Boss(Character):
+    def __init__(self, name, char_id, level, hp, attack_damage):
+        super().__init__(name, char_id)
+        self.level = level
+        self.hp = hp
+        self.attack_damage = attack_damage
+        self.lifespan = hp // 300
+
+hero_name = input("Enter Hero's name: ")
+hero_id = input("Enter Hero's ID: ")
+hero_level = input("Enter Hero's level: ")
+hero_loot = input("Enter Hero's loot: ")
+hero_a = Hero(hero_name, hero_id, hero_level, hero_loot)
+
+boss_name = input("Enter Boss's name: ")
+boss_id = input("Enter Boss's ID: ")
+boss_level = input("Enter Boss's level: ")
+boss_hp = int(input("Enter Boss's hit points (hp): "))
+boss_damage = int(input("Enter Boss's attack damage: "))
+boss_a = Boss(boss_name, boss_id, boss_level, boss_hp, boss_damage)
+
+print("\nHero A:")
+print(f"Name: {hero_a.name}")
+print(f"ID: {hero_a.char_id}")
+print(f"Level: {hero_a.level}")
+print(f"Loot: {hero_a.loot}\n")
+
+print("Boss A:")
+print(f"Name: {boss_a.name}")
+print(f"ID: {boss_a.char_id}")
+print(f"Level: {boss_a.level}")
+print(f"HP: {boss_a.hp}")
+print(f"Attack Damage: {boss_a.attack_damage}")
+print(f"Lifespan: {boss_a.lifespan}")
