@@ -1,0 +1,83 @@
+import pygame
+import random
+from spaceship import Spaceship
+from asteroid import Asteroid
+
+# Initialize Pygame
+pygame.init()
+
+# Screen dimensions
+WIDTH, HEIGHT = 800, 600
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Asteroids")
+
+# Game constants
+NUM_ASTEROIDS = 5  # Adjust as desired
+FONT = pygame.font.Font(None, 36)  # Customize font and size
+
+# Colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+
+# Game objects
+spaceship = Spaceship((WIDTH // 2, HEIGHT // 2))
+asteroids = []
+for _ in range(NUM_ASTEROIDS):
+    asteroids.append(Asteroid(random.randint(0, WIDTH), random.randint(0, HEIGHT)))
+
+# Game loop
+running = True
+clock = pygame.time.Clock()
+FPS = 60  # Adjust FPS if needed
+
+# Score and lives
+score = 0
+lives = 3
+
+while running:
+    # Event handling
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            spaceship.handle_keydown(event.key)
+        elif event.type == pygame.KEYUP:
+            spaceship.handle_keyup(event.key)
+
+    # Update game objects
+    spaceship.update()
+    for asteroid in asteroids:
+        asteroid.update()
+
+    # Check collisions
+    for asteroid in asteroids:
+        if spaceship.rect.colliderect(asteroid.rect):
+            lives -= 1
+            if lives == 0:
+                running = False
+            asteroids.remove(asteroid)
+            break
+
+    # Generate new asteroids
+    if len(asteroids) < NUM_ASTEROIDS:
+        asteroids.append(Asteroid(random.randint(0, WIDTH), random.randint(0, HEIGHT)))
+
+    # Draw screen
+    screen.fill(BLACK)
+    spaceship.draw(screen)
+    for asteroid in asteroids:
+        asteroid.draw(screen)
+
+    # Draw score and lives
+    score_text = FONT.render(f"Score: {score}", True, WHITE)
+    lives_text = FONT.render(f"Lives: {lives}", True, WHITE)
+    screen.blit(score_text, (10, 10))
+    screen.blit(lives_text, (WIDTH - lives_text.get_width() - 10, 10))
+
+    pygame.display.flip()
+
+    # Limit FPS
+    clock.tick(FPS)
+
+# Quit Pygame
+pygame.quit()
